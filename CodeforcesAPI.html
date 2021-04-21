@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>codeforces API</title>
+    <style>
+        #table{
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <input type="text" id="input"></input>
+        <button onclick="fun()">click</button>
+        <table id="table" border="solid 2px red">
+            <tr>
+                <th>NO.</th>
+                <th>Problem Name</th>
+                <th>Rating</th>
+            </tr>
+        </table>
+    </div>
+    <script>
+        function fun(){
+            var tag = document.getElementById("input").value;
+            const url = `https://codeforces.com/api/problemset.problems?tags=${tag}`;
+            return fetch(url)
+            .then(result => result.json())
+            .then(responce => {
+                // console.log(responce);
+                var problems = responce.result.problems;
+                console.log(problems);
+                for(x in problems){
+                    // console.log(problems[x]);
+                    var contestId = problems[x].contestId;
+                    var index = problems[x].index;
+                    var name = problems[x].name;
+                    var rating = problems[x].rating;
+                    var link = `https://codeforces.com/contest/${contestId}/problem/${index}`;
+                    console.log(link);
+                    var table = document.getElementById('table');
+                    var tr = document.createElement('tr');
+                    var th1 = document.createElement('th');
+                    var th2 = document.createElement('th');
+                    var th3 = document.createElement('th');
+                    var a = document.createElement('a');
+                    a.textContent = name;
+                    a.setAttribute('href',link);
+                    th2.appendChild(a);
+                    th1.textContent = `${x}`;
+                    // th2.textContent = name;
+                    th3.textContent = rating;
+                    tr.appendChild(th1);
+                    tr.appendChild(th2);
+                    tr.appendChild(th3);
+                    table.appendChild(tr);
+                }
+                // console.log(responce.result.problems[0].contestId);
+            })
+            .catch(err => console.log(err));
+        }
+        
+    </script>
+</body>
+</html>
